@@ -102,6 +102,11 @@ class BiasEvaluator(object):
 
         model = getattr(models, self.INTRASENTENCE_MODEL)(
             self.PRETRAINED_CLASS).to(self.device)
+
+        if self.INTERSENTENCE_LOAD_PATH:
+            model.load_state_dict(torch.load(self.INTERSENTENCE_LOAD_PATH))
+            print('model loaded')
+
         model.eval()
 
         start_token = torch.tensor(self.tokenizer.encode(
@@ -157,6 +162,10 @@ class BiasEvaluator(object):
             initial_token_probabilities[0], dim=-1)
         assert initial_token_probabilities.shape[0] == 1
         assert initial_token_probabilities.shape[1] == 1
+
+        if self.INTERSENTENCE_LOAD_PATH:
+            model.load_state_dict(torch.load(self.INTERSENTENCE_LOAD_PATH))
+            print('model loaded')
 
         model.eval()
         clusters = self.dataloader.get_intersentence_examples()[:1000]
@@ -264,6 +273,7 @@ class BiasEvaluator(object):
 
         if self.INTERSENTENCE_LOAD_PATH:
             model.load_state_dict(torch.load(self.INTERSENTENCE_LOAD_PATH))
+            print('model loaded')
 
         model.eval()
         dataset = IntersentenceDataset(self.tokenizer, args)
@@ -314,6 +324,6 @@ if __name__ == "__main__":
     evaluator = BiasEvaluator(**vars(args))
     results = evaluator.evaluate()
     output_file = os.path.join(
-        args.output_dir, f"predictions_{args.pretrained_class}_{args.intersentence_model}_{args.intrasentence_model}.json")
+        args.output_dir, f"predictions_{args.pretrained_class}_{args.intersentence_model}_{args.intrasentence_model}_rewrite.json")
     with open(output_file, "w+") as f:
         json.dump(results, f, indent=2)

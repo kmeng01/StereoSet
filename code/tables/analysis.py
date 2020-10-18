@@ -9,7 +9,7 @@ from collections import Counter, defaultdict
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument("--no-cuda", default=False, action="store_true")
-    parser.add_argument("--input-file", default="../../data/bias.json", type=str)
+    parser.add_argument("--input-file", default="../../data/dev.json", type=str)
     return parser.parse_args()
 
 def main(args):

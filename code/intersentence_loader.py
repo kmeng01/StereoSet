@@ -45,7 +45,7 @@ class IntersentenceDataset(Dataset):
                     attention_mask = [1 for _ in input_ids] 
                     self.preprocessed.append((input_ids, token_type_ids, attention_mask, sentence.ID))  
                 else:
-                    encoded_dict = self.tokenizer.encode_plus(text=context, text_pair=sentence.sentence, add_special_tokens=True, max_length=self.max_seq_length, truncation_strategy="longest_first", pad_to_max_length=False, return_tensors=None, return_token_type_ids=True, return_attention_mask=True, return_overflowing_tokens=False, return_special_tokens_mask=False) 
+                    encoded_dict = self.tokenizer.encode_plus(text=context, text_pair=sentence.sentence, truncation=True, add_special_tokens=True, max_length=self.max_seq_length, truncation_strategy="longest_first", pad_to_max_length=True, return_tensors=None, return_token_type_ids=True, return_attention_mask=True, return_overflowing_tokens=False, return_special_tokens_mask=False)
                     # prior tokenization
                     # input_ids, position_ids, attention_mask = self._tokenize(context, sentence)
 
@@ -146,7 +146,7 @@ class SentimentIntersentenceDataset(Dataset):
                 else:
                     s = f"{context} {sentence.sentence}"
                     pad_to_max_length = self.batch_size>1
-                    encoded_dict = self.tokenizer.encode_plus(text=context, text_pair=sentence.sentence, add_special_tokens=True, max_length=self.max_seq_length, truncation_strategy="longest_first", pad_to_max_length=pad_to_max_length, return_tensors="pt", return_token_type_ids=True, return_attention_mask=True, return_overflowing_tokens=False, return_special_tokens_mask=False) 
+                    encoded_dict = self.tokenizer.encode_plus(text=context, text_pair=sentence.sentence, truncation=True, add_special_tokens=True, max_length=self.max_seq_length, truncation_strategy="longest_first", pad_to_max_length=pad_to_max_length, return_tensors="pt", return_token_type_ids=True, return_attention_mask=True, return_overflowing_tokens=False, return_special_tokens_mask=False)
                     # prior tokenization
                     # input_ids, position_ids, attention_mask = self._tokenize(context, sentence)
 
